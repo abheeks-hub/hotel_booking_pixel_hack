@@ -592,4 +592,327 @@ footer {
   }
 }
 
-/*  */
+
+/* ---------- image slider infinite ---------- */
+.auto-slider-section {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.slider-heading {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+/* Slider container */
+.slider {
+  height: 250px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Track that moves */
+.slide-track {
+  display: flex;
+  width: calc(250px * 20); /* 10 images × 2 loops */
+  animation: scroll 40s linear infinite;
+}
+
+/* Images */
+.slide-track img {
+  height: 250px;
+  width: 250px;
+  object-fit: cover;
+  margin: 0 10px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease;
+}
+
+/* Hover effect */
+.slide-track img:hover {
+  transform: scale(1.05);
+}
+
+/* Animation Keyframes */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ===========================================
+   FULL RESPONSIVE FIX — UNIVERSAL MOBILE FIXES
+   =========================================== */
+
+@media (max-width: 768px) {
+
+  /* NAVBAR */
+  nav {
+    padding: 0 1rem;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+  }
+
+  /* HERO SECTION */
+  .hero {
+    height: 78vh;
+    background-position: center;
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 1.9rem;
+    margin-bottom: 10px;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  /* RESPONSIVE SEARCH BOX */
+  .hero-search-box {
+    flex-direction: column;
+    width: 92%;
+    padding: 18px 20px;
+    gap: 12px;
+  }
+
+  .hero-search-box input,
+  .hero-search-box select {
+    width: 100%;
+  }
+
+  .hero-search-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* HOTELS GRID */
+  .hotels-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .hotel-card img {
+    height: 200px;
+  }
+
+  .hotel-card-content {
+    padding: 18px;
+  }
+
+  .price {
+    font-size: 1.1rem;
+  }
+
+  .book-btn {
+    height: 45px;
+    font-size: 1rem;
+  }
+
+  /* WHY CHOOSE US */
+  .why-us-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .why-card {
+    padding: 22px;
+  }
+
+  .why-icon {
+    font-size: 2.4rem;
+  }
+
+  /* SLIDER */
+  .slider {
+    height: 180px;
+  }
+
+  .slide-track {
+    width: calc(180px * 20);
+  }
+
+  .slide-track img {
+    height: 170px;
+    width: 170px;
+    margin: 0 6px;
+  }
+
+  /* FOOTER */
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+
+/* ============================
+   SUPER SMALL DEVICES FIX
+   (iPhone SE / old Android)
+   ============================ */
+@media (max-width: 430px) {
+
+  .hero {
+    height: 65vh;
+  }
+
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero-search-box {
+    width: 95%;
+  }
+
+  .slider {
+    height: 150px;
+  }
+
+  .slide-track {
+    width: calc(150px * 20);
+  }
+
+  .slide-track img {
+    width: 150px;
+    height: 150px;
+    margin: 0 4px;
+  }
+}
+
+/* 3D Slider */
+.slider3d-section {
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.slider3d-container {
+  position: relative;
+  width: 420px;
+  height: 300px;
+  transform-style: preserve-3d;
+  animation: rotate3D 18s linear infinite;
+}
+
+.slider3d-container img {
+  position: absolute;
+  width: 260px;
+  height: 160px;
+  object-fit: cover;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+}
+
+@keyframes rotate3D {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+/* Make search box responsive on all screens */
+.hero-search-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -80px; /* keeps it inside hero image */
+}
+
+.hero-search-box {
+  display: flex;
+  align-items: flex-end;
+  gap: 22px;
+  padding: 25px;
+  width: 75%;
+  max-width: 1100px;
+
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+
+  transition: 0.3s ease;
+}
+
+.hero-search-box:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.search-field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.search-field input,
+.search-field select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 15px;
+}
+
+.search-field label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #dcdcff;
+}
+.hero-search-btn {
+  padding: 14px 22px;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.hero-search-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(118, 75, 162, 0.35);
+}
+/* MOBILE FIX */
+/* FINAL SEARCH BOX MOBILE FIX */
+@media (max-width: 768px) {
+
+  .hero-search-box {
+    flex-direction: column;
+    width: 90%;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .hero-search-box input,
+  .hero-search-box select {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .hero-search-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    margin-top: 6px;
+  }
+}
+
