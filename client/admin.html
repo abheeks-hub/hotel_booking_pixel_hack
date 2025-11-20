@@ -20,41 +20,50 @@
         aria-modal="true"
       >
         <div class="auth-brand">
-          <div class="logo-mark">CZ</div>
+          <div class="logo-mark"><img src="./assets/logo.png" alt=""></div>
           <div>
             <h1 id="authTitle">Comfort Zone — Admin</h1>
             <p class="muted">Sign in to manage bookings, users and content</p>
           </div>
         </div>
 
-        <form id="authForm" class="auth-form" autocomplete="off">
-          <label class="label">Email</label>
-          <input
-            id="adminEmail"
-            type="email"
-            placeholder="admin@comfort.zone"
-            required
-          />
-          <label class="label">Password</label>
-          <input
-            id="adminPassword"
-            type="password"
-            placeholder="password"
-            required
-          />
-          <div
-            class="row"
-            style="justify-content: space-between; align-items: center"
-          >
-            <div class="muted small">
-              Demo creds: <strong>admin@comfort.zone</strong> /
-              <strong>adminpass</strong>
-            </div>
-            <button id="authSubmit" class="btn primary">Log in</button>
-          </div>
-        </form>
+        <form id="authForm" class="auth-form" autocomplete="off" autocomplete="off" spellcheck="false">
+  <label class="label">Email</label>
+  <input
+    id="adminEmail"
+    type="email"
+    placeholder="admin@comfort.zone"
+    required
+    autocomplete="username"
+    autocapitalize="off"
+    spellcheck="false"
+  />
+
+  <label class="label">Password</label>
+  <input
+    id="adminPassword"
+    type="password"
+    placeholder="Enter your password"
+    required
+    autocomplete="current-password"
+    autocapitalize="off"
+    spellcheck="false"
+  />
+
+  <!-- LOGIN BUTTON directly below password -->
+  <button id="authSubmit" class="btn primary login-btn" type="submit">Log in</button>
+
+  <!-- keep the demo creds visible but placed below the button -->
+  <div class="row" style="justify-content: space-between; align-items: center; margin-top:8px">
+    <div class="muted small">
+      Demo creds: <strong>admin@comfort.zone</strong> <br>
+      <strong>Password: adminpass</strong>
+    </div>
+  </div>
+</form>
+
         <div class="auth-foot muted small">
-          This is a demo UI — replace with server auth for production.
+          This is a demo UI — ( What do u think this is production level? Hell na ).
         </div>
       </div>
     </main>

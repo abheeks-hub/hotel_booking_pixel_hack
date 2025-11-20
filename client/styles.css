@@ -38,7 +38,7 @@ nav {
 }
 .nav-links {
   display: flex;
-  gap: 1.25rem;
+  gap: 3rem;
   list-style: none;
 }
 .nav-links a {
@@ -94,8 +94,10 @@ nav {
   width: 100%;
   display: flex;
   justify-content: center;
+  pointer-events: none; /* wrapper inert by default; card receives events */
 }
 .hero-search-box {
+  /* desktop default: row layout (kept) */
   display: flex;
   align-items: flex-end;
   gap: 18px;
@@ -107,6 +109,8 @@ nav {
   box-shadow: 0 14px 40px rgba(2, 6, 23, 0.6);
   width: 76%;
   max-width: 1100px;
+
+  pointer-events: auto; /* make interactive even when wrapper is inert */
 }
 .search-field {
   display: flex;
@@ -137,6 +141,17 @@ nav {
   color: #071014;
   font-weight: 700;
   box-shadow: 0 8px 24px rgba(7, 16, 20, 0.45);
+
+  /* restore interactive layout & responsive behavior */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 140px;
+  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.28s,
+    background 0.18s;
+  will-change: transform, box-shadow;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Container & titles */
@@ -368,8 +383,14 @@ nav {
   }
 }
 
-/* Responsive */
+/* ===========================
+   Responsive Adjustments
+   (mobile-first improvements & fixes)
+   =========================== */
+
+/* Mobile/tablet - stack hotel cards, make search box sit above content */
 @media (max-width: 920px) {
+  /* Stack hotel cards vertically */
   .hotel-card {
     grid-template-columns: 1fr;
   }
@@ -377,54 +398,79 @@ nav {
     min-height: 180px;
     max-height: 260px;
   }
+
+  /* Search: convert to vertical card & keep it inside hero without overlap */
   .hero-search-box {
     width: 92%;
     padding: 16px;
     gap: 12px;
     flex-direction: column;
     align-items: stretch;
+
+    /* ensure the search card visually sits above the following sections */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 250px;
+    z-index: 90;
+    box-shadow: 0 18px 46px rgba(2, 6, 23, 0.6);
+    background: rgba(6, 8, 10, 0.26);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   }
+
+  .hero {
+    /* increase bottom padding so hero contains the search card without overlapping next sections */
+    padding-bottom: 180px;
+  }
+
   .hero-content h1 {
     font-size: 2rem;
   }
+
+  .hero-search-box input,
+  .hero-search-box select {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .hero-search-btn {
+    width: 100% !important;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    min-width: 0;
+  }
+
+  /* ensure hotels section has breathing room */
+  .hotels-section {
+    margin-top: 1.8rem;
+    padding-top: 0.5rem;
+  }
 }
+
+/* Small devices tweaks */
 @media (max-width: 420px) {
   .hero {
-    height: 65vh;
+    height: 70vh;
+    padding-bottom: 150px; /* keeps search card inside hero */
   }
   .hero-search-box {
     width: 95%;
-    padding: 14px;
+    padding: 12px;
+    gap: 10px;
+  }
+  .hero-search-btn {
+    padding: 12px;
+    font-size: 14px;
   }
   .slide-track img {
     height: 150px;
     width: 150px;
   }
 }
-/* ----------------------------
-  SEARCH BUTTON / MOBILE FIXES
-  Paste this at the end of styles.css
-  ---------------------------- */
 
-/* Restore button layout + hover animation (desktop & tablet) */
-.hero-search-btn {
-  /* keep as inline-flex so we can center content and keep hover */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  /* prevent button from shrinking inside the flex row */
-  flex: 0 0 auto;
-
-  /* visual polish & restore hover transition */
-  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1),
-    box-shadow 0.28s ease, background 0.2s ease;
-  will-change: transform, box-shadow;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* stronger hover (desktop) */
+/* Desktop/tablet enhancements for layout safety */
 @media (min-width: 921px) {
   .hero-search-btn:hover,
   .hero-search-btn:focus {
@@ -436,227 +482,92 @@ nav {
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(7, 16, 20, 0.35);
   }
-}
 
-/* Ensure button is full-width and readable on small screens */
-@media (max-width: 920px) {
-  .hero-search-btn {
-    width: 100% !important;
-    flex: 0 0 auto;
-    padding: 14px 18px;
-    border-radius: 12px;
-    font-size: 15px;
-  }
-}
-
-/* Hero / Search overlap fix on mobile:
-   Reserve extra space inside the hero so the search box can sit comfortably
-   and add a small top-gap to the hotels section to avoid visual merge. */
-@media (max-width: 920px) {
-  /* Add bottom padding to hero so search box doesn't overlap following sections */
-  .hero {
-    /* increase padding-bottom to make room for the search card */
-    padding-bottom: 180px; /* tweak up/down if needed */
-  }
-
-  /* Position wrapper consistently (keeps search inside hero) */
-  .hero-search-wrapper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 20px; /* vertical offset from bottom of hero */
-    display: flex;
-    justify-content: center;
-    z-index: 80;
-    pointer-events: none; /* allow children to capture clicks, keeps wrapper inert */
-  }
-
-  /* Make the search box active for pointer events and full-width */
+  /* keep the search in-row layout on larger screens */
   .hero-search-box {
-    pointer-events: auto;
-    width: 92%;
-    max-width: 980px;
-    margin: 0 auto;
-    transform: none !important;
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    padding: 22px 26px;
+    width: 76%;
+    max-width: 1100px;
     position: relative;
-    z-index: 90;
-    box-shadow: 0 18px 46px rgba(2, 6, 23, 0.6);
-    background: rgba(6, 8, 10, 0.26);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+    transform: none;
   }
 
-  /* Keep inputs big & tappable */
-  .hero-search-box input,
-  .hero-search-box select {
-    padding: 14px;
-    font-size: 15px;
-  }
-
-  /* make sure search fields are stacked nicely */
-  .hero-search-box {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-
-  /* prevent the hotels section from visually colliding */
-  .hotels-section {
-    margin-top: 1.75rem;
-    padding-top: 0.5rem;
+  /* hotels grid becomes multi-column on larger screens */
+  .hotels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   }
 }
 
-/* Extra small screens tweak */
-@media (max-width: 420px) {
-  .hero {
-    padding-bottom: 150px;
-  }
-  .hero-search-box {
-    width: 95%;
-    padding: 12px;
-    gap: 10px;
-  }
-  .hero-search-btn {
-    padding: 12px;
-    font-size: 14px;
-  }
-}
+/* ===========================
+   Final hamburger + mobile nav panel rules
+   (keeps your existing look, adds open/close behavior)
+   =========================== */
 
-/* Accessibility: keyboard focus ring for button */
-.hero-search-btn:focus {
-  outline: 3px solid rgba(113, 178, 128, 0.18);
-  outline-offset: 3px;
-}
-/* ---------------------------
-  FINAL SEARCH + HAMBURGER FIX
-  Paste at end of styles.css
-   - prevents overlap
-   - keeps button responsive
-   - restores hamburger -> X animation
-----------------------------*/
-
-/* ensure box-sizing everywhere for consistent sizing */
-* { box-sizing: border-box; }
-
-/* Button responsive & hover polish */
-.hero-search-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;              /* don't shrink in desktop row */
-  min-width: 140px;            /* prevents escaping when resizing inspector */
-  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease, background .18s;
-  will-change: transform, box-shadow;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Desktop hover */
-@media (min-width: 921px) {
-  .hero-search-btn:hover,
-  .hero-search-btn:focus {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 36px rgba(7,16,20,0.45);
-    filter: brightness(1.03);
-  }
-}
-
-/* Layout safety for search inputs when shrinking */
-.hero-search-box {
+/* Restore/ensure hamburger animation */
+.hamburger {
   display: flex;
-  flex-wrap: wrap;             /* allow fields to wrap instead of overflow */
-  gap: 12px;
-  align-items: flex-end;
+  cursor: pointer;
+  width: 34px;
+  height: 24px;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1200;
 }
-.hero-search-box .search-field { min-width: 140px; flex: 1 1 140px; }
+/* ensure hamburger hidden by default on desktop */
+.hamburger {
+  display: none !important;
+}
 
-/* MOBILE: make search box sit ABOVE following content without overlapping */
+/* enable on mobile */
 @media (max-width: 920px) {
-
-  /* reserve larger vertical space inside hero so the search card sits comfortably */
-  .hero { padding-bottom: 230px; } /* increase if still overlapping on some devices */
-
-  /* position wrapper inside hero and center the card */
-  .hero-search-wrapper {
-    position: absolute;
-    left: 0; right: 0;
-    bottom: 20px;
-    display: flex;
-    justify-content: center;
-    pointer-events: none; /* wrapper inert */
-    z-index: 80;
+  .hamburger {
+    display: flex !important;
   }
-
-  /* make the card itself interactive and full width */
-  .hero-search-box {
-    pointer-events: auto;            /* enable clicks */
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 92%;
-    max-width: 980px;
-    padding: 16px;
-    gap: 12px;
-    border-radius: 12px;
-    flex-direction: column;         /* stack fields on mobile */
-    align-items: stretch;
-    z-index: 90;
-    box-shadow: 0 18px 46px rgba(2,6,23,0.6);
-    background: rgba(6,8,10,0.26);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-  }
-
-  /* fields and button full width on mobile */
-  .hero-search-box .search-field,
-  .hero-search-box input,
-  .hero-search-box select,
-  .hero-search-btn {
-    width: 100% !important;
-    flex: none;
-  }
-
-  /* ensure hotels section has breathing room below the search card */
-  .hotels-section { margin-top: 1.8rem; padding-top: 0.6rem; }
-
-  /* slightly smaller button padding on small devices */
-  .hero-search-btn { padding: 12px 14px; font-size: 15px; min-width: 0; }
 }
 
-/* extra small devices */
-@media (max-width:420px) {
-  .hero { padding-bottom: 170px; }
-  .hero-search-box { padding: 12px; gap: 10px; }
-  .hero-search-btn { padding: 11px; font-size: 14px; }
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #fff;
+  border-radius: 4px;
+  transition: transform 0.28s ease, opacity 0.18s ease;
+  transform-origin: center;
 }
-
-/* -------------------------
-  Restore/ensure hamburger animation
---------------------------*/
-.hamburger { display:flex; cursor:pointer; width:34px; height:24px; flex-direction:column; justify-content:space-between; z-index:1200; }
-.hamburger span { display:block; height:3px; width:100%; background:#fff; border-radius:4px; transition: transform .28s ease, opacity .18s ease; transform-origin:center; }
 
 /* active -> X */
-.hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-.hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
 
-/* mobile nav open state */
-.nav-links { transition: transform .32s ease, opacity .28s ease; }
-.nav-links.open { transform: translateY(0) !important; opacity:1; }
-/* -----------------------------
- Mobile panel for .nav-links when hamburger is active
- Paste at end of styles.css
- ----------------------------- */
+/* mobile nav open state (animation) */
+.nav-links {
+  transition: transform 0.32s ease, opacity 0.28s ease;
+}
+.nav-links.open {
+  transform: translateY(0) !important;
+  opacity: 1;
+}
 
+/* Panel layout for small screens */
 @media (max-width: 920px) {
-  /* Base: keep .nav-links hidden off-canvas by default */
   .nav-links {
     position: fixed;
-    top: 64px;                 /* slide under header (adjust if header height different) */
+    top: 64px; /* slide under header */
     right: 0;
     left: 0;
-    height: 35vh;
+    height: 43vh;
     transform: translateY(-120%); /* hidden above view */
     opacity: 0;
     pointer-events: none;
@@ -665,21 +576,24 @@ nav {
     gap: 0;
     align-items: center;
     padding: 1.25rem;
-    background: linear-gradient(180deg, rgba(6,8,10,0.95), rgba(6,8,10,0.90));
+    background: linear-gradient(
+      180deg,
+      rgba(6, 8, 10, 0.95),
+      rgba(6, 8, 10, 0.9)
+    );
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     z-index: 1150;
-    transition: transform .36s cubic-bezier(.2,.9,.25,1), opacity .28s ease;
+    transition: transform 0.36s cubic-bezier(0.2, 0.9, 0.25, 1),
+      opacity 0.28s ease;
   }
 
-  /* Visible state when .open is applied */
   .nav-links.open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* Layout of links inside panel */
   .nav-links li {
     width: 100%;
     max-width: 520px;
@@ -694,16 +608,274 @@ nav {
     color: #e8faf0;
     border-radius: 10px;
     margin: 8px 0;
-    background: rgba(255,255,255,0.02);
-    transition: background .18s ease, transform .12s ease;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background 0.18s ease, transform 0.12s ease;
   }
 
   .nav-links a:hover,
   .nav-links a:focus {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
     transform: translateY(-3px);
   }
 
-  /* Small helper: keep the hamburger on top of panel */
-  .hamburger { z-index: 1200; }
+  .hamburger {
+    z-index: 1200;
+  }
+}
+
+/* ===========================
+   Modern professional footer
+   (kept as provided)
+   =========================== */
+.site-footer {
+  background: linear-gradient(180deg, rgba(7, 9, 12, 0.6), rgba(7, 9, 12, 0.9));
+  color: #dfeef0;
+  padding: 48px 0 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+.site-footer .footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Top area: brand + newsletter */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+.footer-brand {
+  max-width: 46%;
+}
+.footer-logo {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+.footer-tag {
+  margin-top: 6px;
+  color: #9fb8b0;
+  font-size: 14px;
+}
+
+/* Newsletter */
+.footer-news {
+  min-width: 260px;
+}
+.news-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.news-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  font-size: 14px;
+}
+.footer-cta {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #3f7fbf, #5da3ff);
+  color: #071018;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(4, 10, 18, 0.6);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.footer-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(4, 10, 18, 0.6);
+}
+.footer-note {
+  margin-top: 8px;
+  color: #93a9a1;
+  font-size: 12px;
+}
+
+/* Grid of links */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin-top: 8px;
+}
+.footer-col h4 {
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-col a {
+  color: #cfece0;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.12s ease;
+}
+.footer-col a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* contact list small */
+.contact-list li {
+  color: #9fb8b0;
+  font-size: 14px;
+}
+
+/* social */
+.social-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #cfece0;
+  text-decoration: none;
+  transition: transform 0.14s ease, background 0.14s ease;
+}
+.social:hover {
+  transform: translateY(-4px);
+  background: rgba(93, 163, 255, 0.08);
+  color: #fff;
+}
+
+/* bottom legal row */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  margin-top: 6px;
+}
+.footer-bottom .legal {
+  color: #98b8af;
+  font-size: 13px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.footer-bottom a {
+  color: #9fb8b0;
+  text-decoration: none;
+}
+.footer-bottom a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.footer-bottom .dot {
+  color: rgba(255, 255, 255, 0.06);
+  margin: 0 6px;
+}
+.made {
+  color: #859ea0;
+  font-size: 13px;
+}
+
+/* small screen tweaks for footer */
+@media (max-width: 920px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .footer-brand {
+    max-width: 100%;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-news {
+    order: -1;
+  } /* show newsletter first on mobile */
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .news-row {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .footer-cta {
+    width: 100%;
+  }
+}
+
+/* Utility: visually-hidden for accessibility */
+.sr-only {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: -1px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.search-field input::placeholder{
+  color: white;
 }
