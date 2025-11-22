@@ -261,3 +261,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// improved toggleMenu with overlay blur behind panel
+function toggleMenu() {
+  const ham = document.querySelector(".hamburger");
+  const nav = document.querySelector(".nav-links");
+
+  if (!nav || !ham) return;
+
+  const isOpen = nav.classList.contains("open");
+
+  // ensure an overlay exists (create once)
+  let overlay = document.querySelector(".nav-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.className = "nav-overlay";
+    document.body.appendChild(overlay);
+
+    // clicking the overlay closes the nav
+    overlay.addEventListener("click", () => {
+      nav.classList.remove("open");
+      ham.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+  }
+
+  if (isOpen) {
+    nav.classList.remove("open");
+    ham.classList.remove("active");
+    overlay.classList.remove("active");
+  } else {
+    nav.classList.add("open");
+    ham.classList.add("active");
+    overlay.classList.add("active");
+
+    // prevent body scroll when menu open (optional but nice)
+    document.body.style.overflow = "hidden";
+  }
+
+  // restore body scroll when menu closes
+  if (!nav.classList.contains("open")) {
+    document.body.style.overflow = "";
+  }
+}

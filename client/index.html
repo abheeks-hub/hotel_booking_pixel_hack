@@ -9,6 +9,7 @@
   <body>
     <!-- Header -->
     <header>
+      <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
       <nav>
         <div class="brand">
           <div class="logo-mark">
@@ -39,42 +40,16 @@
       </div>
     </section>
 
-    <!-- Search Box -->
-    <!-- Glassmorphic Search Box (Inside Hero Section) -->
-    <div class="hero-search-wrapper reveal">
-      <form class="hero-search-box" id="searchForm">
-        <div class="search-field">
-          <label for="destination">Destination</label>
-          <input
-            id="destination"
-            name="destination"
-            type="text"
-            placeholder="Where are you heading?"
-            required
-          />
-        </div>
-
-        <div class="search-field">
-          <label for="checkin">Check-in</label>
-          <input id="checkin" name="checkin" type="date" required />
-        </div>
-
-        <div class="search-field">
-          <label for="checkout">Check-out</label>
-          <input id="checkout" name="checkout" type="date" required />
-        </div>
-
-        <div class="search-field">
-          <label for="guests">Guests</label>
-          <select id="guests" name="guests" required>
-            <option value="1">1 Guest</option>
-            <option value="2">2 Guests</option>
-            <option value="3">3 Guests</option>
-            <option value="4">4+ Guests</option>
-          </select>
-        </div>
-
-        <button type="submit" class="hero-search-btn">Search Hotels</button>
+    <!-- simplified search wrapper (single destination input) -->
+      <div class="hero-search-wrapper reveal">
+        <form class="hero-search-box" id="searchForm">
+          <div class="search-field">
+            <label for="destination">Where are you heading?</label>
+            <input id="destination" type="search" placeholder="Enter a city or hotel name" autocomplete="off" />
+          </div>
+          <button type="submit" class="hero-search-btn">Search Hotels</button>
+        </form>
+      </div>
       </form>
     </div>
 
